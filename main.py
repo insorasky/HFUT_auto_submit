@@ -142,15 +142,11 @@ class Daka:
         else:
             return data['msg']
 
-    def __getIp(self):
-        return self.__student.request('http://210.45.240.45/backend/getIP.php').json()['processedString']
-
     def run(self):
         if UserInfo.vpn.value:
             if self.__student.login(UserInfo.id.value, UserInfo.password2.value) is not True:
                 print('新信息门户密码错误！')
                 return
-        print('当前IP地址为：', self.__getIp())
         try:
             logined = self.__login()
         except requests.exceptions.RequestException: # 你HFUT又双叒封网辣
