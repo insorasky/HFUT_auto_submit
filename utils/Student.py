@@ -1,8 +1,8 @@
 import requests
 from requests.utils import add_dict_to_cookiejar, dict_from_cookiejar
 import json
-from ECBPkcs7 import ECBPkcs7
-from VPNUrl import encrypUrl
+from .ECBPkcs7 import ECBPkcs7
+from .VPNUrl import encrypUrl
 
 VPN_DOMAIN = 'webvpn.hfut.edu.cn'
 URL_VPN_BASE = 'https://' + VPN_DOMAIN

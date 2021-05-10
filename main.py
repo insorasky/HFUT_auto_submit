@@ -1,9 +1,8 @@
 import requests, re, base64, json
 from datetime import time, datetime
 from enum import Enum
-from Crypto.Cipher import AES
-from Student import Student
-from ECBPkcs7 import ECBPkcs7
+from utils.Student import Student
+from utils.ECBPkcs7 import ECBPkcs7
 from config import UserInfo
 
 class Url(Enum):
