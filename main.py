@@ -170,7 +170,6 @@ class Daka:
             now = time(hour=now.hour, minute=now.minute, second=now.second)
             print('开始时间：', times.start)
             print('结束时间：', times.end)
-            return
             if (now < times.end) and (now > times.start):
                 saved = self.__save()
                 if saved == True:
