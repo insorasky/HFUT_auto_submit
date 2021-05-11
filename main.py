@@ -150,7 +150,7 @@ class Daka:
         try:
             logined = self.__login()
         except requests.exceptions.RequestException: # 你HFUT又双叒封网辣
-            if UserInfo.auto_vpn and (not UserInfo.vpn):
+            if UserInfo.auto_vpn.value and (not UserInfo.vpn.value):
                 print("封网，正在尝试使用VPN")
                 if self.__student.login(UserInfo.id.value, UserInfo.password2.value) is not True:
                     print('新信息门户密码错误！')
