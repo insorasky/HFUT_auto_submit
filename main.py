@@ -16,7 +16,6 @@ class Url(Enum):
     save = 'http://stu.hfut.edu.cn/xsfw/sys/xsyqxxsjapp/mrbpa/saveMrbpa.do'
 
 class Daka:
-    __student = Student()
     __headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:88.0) Gecko/20100101 Firefox/88.0',
@@ -27,9 +26,9 @@ class Daka:
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2'
     }
-
-    def __vpnLogin(self):
-        return self.__student.login(UserInfo.id.value, UserInfo.id.password2) == True
+    
+    def __init__(self):
+        self.__student = Student()
 
     def __getCryptoKey(self):
         data = self.__student.request(Url.key.value).text
@@ -41,14 +40,14 @@ class Daka:
         key = self.__getCryptoKey()
         return ECBPkcs7(key).encrypt(password)
 
-    def __login(self):
+    def __login(self, id, password):
         data = self.__student.request(
             url=Url.login.value,
             method='POST',
             headers=self.__headers,
             data={
-                'userName': UserInfo.id.value,
-                'password': self.__encryptPwd(UserInfo.password.value),
+                'userName': id,
+                'password': self.__encryptPwd(password),
                 'isWeekLogin': 'false'
             }
         ).json()
@@ -142,21 +141,21 @@ class Daka:
         else:
             return data['msg']
 
-    def run(self):
+    def run(self, id, password, password2):
         if UserInfo.vpn.value:
-            if self.__student.login(UserInfo.id.value, UserInfo.password2.value) is not True:
+            if self.__student.login(id, password2) is not True:
                 print('新信息门户密码错误！')
                 return
         try:
-            logined = self.__login()
+            logined = self.__login(id, password)
         except requests.exceptions.RequestException: # 你HFUT又双叒封网辣
             if UserInfo.auto_vpn and (not UserInfo.vpn):
                 print("封网，正在尝试使用VPN")
-                if self.__student.login(UserInfo.id.value, UserInfo.password2.value) is not True:
+                if self.__student.login(id, password2) is not True:
                     print('新信息门户密码错误！')
                     return
                 print('WebVPN登录成功！')
-                logined = self.__login()
+                logined = self.__login(id, password)
             else:
                 print("连接失败，可能又封网了！")
                 return
@@ -170,7 +169,6 @@ class Daka:
             now = time(hour=now.hour, minute=now.minute, second=now.second)
             print('开始时间：', times.start)
             print('结束时间：', times.end)
-            return
             if (now < times.end) and (now > times.start):
                 saved = self.__save()
                 if saved == True:
@@ -184,5 +182,8 @@ class Daka:
 
 
 if __name__ == '__main__':
-    daka = Daka()
-    daka.run()
+    for user in UserInfo.users.value:
+        if user['enable']:
+            daka = Daka()
+            print("当前打卡：" + user['id'])
+            daka.run(user['id'], user['password'], user['password2'])
