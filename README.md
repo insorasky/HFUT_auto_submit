@@ -4,7 +4,7 @@
 
 - 使用前请先设置`config.py`，将里面的值更改为自己的值；
 
-- 通过云函数/计划任务等将`main.py`定时执行即可；
+- 通过云函数/计划任务等将`main.py`定时执行即可；**最近严查，请勿将本项目在GitHub Actions上运行！**
 
 - 使用前请安装最新版本的Python，并运行`pip install -r requirements.txt`安装依赖；
 
